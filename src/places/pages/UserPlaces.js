@@ -1,5 +1,6 @@
 import React from "react";
-import PlacesList from "../components/PlacesList";
+import {useParams} from "react-router-dom";
+import PlacesList from "../PlacesList";
 
 const PLACES = [
     {
@@ -29,7 +30,10 @@ const PLACES = [
 ];
 
 const UserPlaces = () =>{
-    return <PlacesList items={PLACES} />;
+    const userId = useParams().userId;
+    const loadedPLACES = PLACES.filter(place => place.creator===userId);
+
+    return <PlacesList items={loadedPLACES} />;
 };
 
 export default UserPlaces;
