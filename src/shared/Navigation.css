@@ -1,6 +1,6 @@
 .nav_header {
     align-items: center;
-    background-color: crimson;
+    background-color: #ff0055;
     height: 100px;
     width: 100%;
     position: relative;
@@ -17,6 +17,9 @@
     width: 70px;
     background: transparent;
     border: none;
+    align-items: center;
+}.nav_btn:hover{
+    background-color: rgb(152, 2, 32);
 }
 
 .nav_btn span{
@@ -26,12 +29,21 @@
     display: block;
 }
 
-.nav_h1{
+.nav_h1 a{
     color: white;
+    text-decoration: none;
+    margin-left: 20px;
+}
+.nav_h1 a:hover{
+    color: rgb(47, 46, 46);
 }
 
 .nav_nav{
     color: white;
+}
+
+.nav_sd{
+    height: 100%;
 }
 
 @media (min-width: 800px) {
@@ -54,3 +66,4 @@
         display: none;
     }
 }
+

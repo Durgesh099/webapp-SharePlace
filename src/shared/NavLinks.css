@@ -10,9 +10,15 @@
 .nav_links a {
     margin-left: 30px;
     text-decoration: none;
-    color: azure;
+    color: white;
+    padding: 5px;
 }
 
-.nav_links li :hover{
-    color: hotpink;
+
+.nav_links a:hover{
+    color: rgb(28, 28, 28);
+}
+.nav_links a.active{
+    border: 1.5px solid black;
+    color: black;
 }
