@@ -9,10 +9,7 @@ const PLACES = [
         description: 'Wonderful nature spot',
         imageUrl: 'https://lh3.googleusercontent.com/p/AF1QipNtm6B4FA2H1ZS94AuHsvtCfvwkonU39qYQT-Mh=s1360-w1360-h1020',
         address: 'D. H. Dhunjibhoy Road, Between Lane Number 2 and 3, Koregaon Rd, Koregaon Park, Pune, Maharashtra 411001',
-        location: {
-            lat:18.5358733,
-            lng:73.8546432
-        },
+        location: 'https://www.google.com/maps/place/Osho+Teerth+Park/@18.5358784,73.8881172,17z/data=!3m1!4b1!4m6!3m5!1s0x3bc2c1004113e727:0xdb7ded8050f08a1f!8m2!3d18.5358733!4d73.8906921!16s%2Fg%2F1tfzkswy?entry=ttu' ,
         creator: 'u1'
     },
     {
