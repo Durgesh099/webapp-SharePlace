@@ -2,7 +2,6 @@ import React , { useState }from 'react';
 import Button from '../shared/components/Button';
 import Card from '../shared/components/Card';
 import Modal from '../shared/components/Modal';
-import Map from '../shared/components/Map';
 import './PlacesItems.css';
 
 const PlacesItems = props => {
@@ -24,7 +23,8 @@ const PlacesItems = props => {
         footer={<Button onClick={closeMapHandler}>CLOSE</Button>}
       >
         <div className="map-container">
-          <Map center={props.coordinates} zoom={16}/>
+          <a href={props.location}><h2>Google Maps Link</h2></a>
+          <p>GoogleMap can be rendered here. Map not visible due to some contraints</p>
         </div>
       </Modal>
 
