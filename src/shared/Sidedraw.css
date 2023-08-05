@@ -28,6 +28,34 @@
     color: rgb(28, 28, 28);
 }
 .sd_link a.active{
-    background-color: rgb(220, 61, 61);
+    background-color: #ff0055;
     color: rgb(28, 28, 28);
+
+    
+}
+
+.sd_link{
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    margin-right: 20px;
+    margin-top: 90px;
+}
+
+.sd_link a {
+    margin-left: 30px;
+    text-decoration: none;
+    color: white;
+    padding: 5px;
+    border-radius: 10%;
+}
+
+
+.sd_link a:hover{
+    color: black;
+}
+.sd_link a.active{
+    border: 1.5px solid black;
+    color: black;
 }

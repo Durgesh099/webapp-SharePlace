@@ -1,23 +1,56 @@
 import React from "react";
 import NavLinks from './NavLinks';
+import Sidedraw from "./Sidedraw";
+import Backdrop from "../shared/components/Backdrop.js";
+import { useState } from "react";
 import './Navigation.css';
+import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 const Navigation = () => {
+    const [drawerIsOpen, setDrawerIsOpen] = useState(false);
+    
+    const openDrawer= () =>{
+        setDrawerIsOpen(true);
+    }
+    const closeDrawer=() =>{
+        setDrawerIsOpen(false);
+    }
+
     return (
+    <React.Fragment>
+    {drawerIsOpen && <Backdrop onClick={closeDrawer}/>}
+    {drawerIsOpen && <Sidedraw>
+    <ul className="sd_link">
+            <h3>
+                <li><NavLink to="/" exact onClick={closeDrawer}>All Users</NavLink></li>
+            </h3>
+            <h3>
+                <li><NavLink to="/u1/places" onClick={closeDrawer}>My Places</NavLink></li>
+            </h3>
+            <h3>
+                <li><NavLink to="/places/new" onClick={closeDrawer}>Add a Place</NavLink></li>
+            </h3>
+            <h3>
+                <li><NavLink to="/any" onClick={closeDrawer}>Authenticate</NavLink></li>
+            </h3>
+        </ul>
+    </Sidedraw>}
     <header className="nav_header">
-        <button className="nav_btn">
+        <button className="nav_btn" onClick={openDrawer}>
             <span></span>
             <span></span>
             <span></span>
         </button>
         <h1 className="nav_h1">
-            Your Places
+            <Link to="/u1/places">Your Places</Link>
         </h1>
         <nav className="nav_nav">
             <NavLinks/>
         </nav>
 
     </header>
+    </React.Fragment>
     );
 }
 
