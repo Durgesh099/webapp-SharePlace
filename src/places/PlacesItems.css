@@ -42,6 +42,11 @@
   .place-item__modal-actions {
     text-align: right;
   }
+
+  .map-container{
+    width: 100%;
+    height: 15rem;
+  }
   
   .place-item__actions button,
   .place-item__actions a {
