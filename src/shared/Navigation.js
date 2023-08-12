@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import NavLinks from './NavLinks';
 import Sidedraw from "./Sidedraw";
 import Backdrop from "../shared/components/Backdrop.js";
@@ -6,6 +6,7 @@ import { useState } from "react";
 import './Navigation.css';
 import { Link } from "react-router-dom";
 import { NavLink } from "react-router-dom";
+import { AuthContext } from "./context/auth-context";
 
 const Navigation = () => {
     const [drawerIsOpen, setDrawerIsOpen] = useState(false);
@@ -17,23 +18,42 @@ const Navigation = () => {
         setDrawerIsOpen(false);
     }
 
+    const auth = useContext(AuthContext);
+
+    let yourPlace;
+    if(auth.isLoggedIn){
+        yourPlace = (
+        <h1 className="nav_h1">
+            <Link to="/u1/places">Your Places</Link>
+        </h1>)
+    } else {
+        yourPlace = (
+        <h1 className="nav_h1">
+            <Link to="/auth">Your Places</Link>
+        </h1>)
+    }
+
     return (
     <React.Fragment>
     {drawerIsOpen && <Backdrop onClick={closeDrawer}/>}
-    {drawerIsOpen && <Sidedraw>
+    {drawerIsOpen && 
+    <Sidedraw>
     <ul className="sd_link">
             <h3>
                 <li><NavLink to="/" exact onClick={closeDrawer}>All Users</NavLink></li>
             </h3>
-            <h3>
+            {auth.isLoggedIn && <h3>
                 <li><NavLink to="/u1/places" onClick={closeDrawer}>My Places</NavLink></li>
-            </h3>
-            <h3>
+            </h3>}
+            {auth.isLoggedIn && <h3>
                 <li><NavLink to="/places/new" onClick={closeDrawer}>Add a Place</NavLink></li>
-            </h3>
-            <h3>
-                <li><NavLink to="/any" onClick={closeDrawer}>Authenticate</NavLink></li>
-            </h3>
+            </h3>}
+            {!auth.isLoggedIn && <h3>
+                <li><NavLink to="/auth" onClick={closeDrawer}>Authenticate</NavLink></li>
+            </h3>}
+            {auth.isLoggedIn && <h3>
+                <li><button className="b" onClick={auth.logout}>Logout</button></li>
+            </h3>}
         </ul>
     </Sidedraw>}
     <header className="nav_header">
@@ -42,9 +62,9 @@ const Navigation = () => {
             <span></span>
             <span></span>
         </button>
-        <h1 className="nav_h1">
-            <Link to="/u1/places">Your Places</Link>
-        </h1>
+
+        {yourPlace}
+
         <nav className="nav_nav">
             <NavLinks/>
         </nav>

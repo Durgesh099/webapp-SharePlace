@@ -35,7 +35,7 @@
     margin-left: 20px;
 }
 .nav_h1 a:hover{
-    color: rgb(47, 46, 46);
+    color: rgb(0, 0, 0);
 }
 
 .nav_nav{
@@ -65,5 +65,19 @@
     .nav_nav {
         display: none;
     }
+}
+
+.b{
+    margin-left: 30px;
+    text-decoration: none;
+    color: white;
+    padding: 5px;
+    background-color: rgba(108, 107, 107,0.9);
+    border: none;
+}
+
+.sd_link a:hover{
+    color: rgb(28, 28, 28);
+    border: 1px black;
 }
 
