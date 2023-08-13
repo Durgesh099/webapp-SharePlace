@@ -1,7 +1,8 @@
-import React , { useState }from 'react';
+import React , { useState, useContext }from 'react';
 import Button from '../shared/components/Button';
 import Card from '../shared/components/Card';
 import Modal from '../shared/components/Modal';
+import {AuthContext} from "../shared/context/auth-context";
 import './PlacesItems.css';
 
 const PlacesItems = props => {
@@ -13,6 +14,8 @@ const PlacesItems = props => {
 
   const openDelete = () => setD(!showD);
   const cancelDelete = () => setD(false);
+
+  const auth = useContext(AuthContext);
 
 
   return (
@@ -59,8 +62,8 @@ const PlacesItems = props => {
           </div>
           <div className="place-item__actions">
             <Button inverse onClick={openMapHandler}>VIEW ON MAP</Button>
-            <Button to={`/places/${props.id}`}>EDIT</Button>
-            <Button danger onClick={openDelete}>DELETE</Button>
+            {auth.isLoggedIn && <Button to={`/places/${props.id}`}>EDIT</Button>}
+            {auth.isLoggedIn && <Button danger onClick={openDelete}>DELETE</Button>}
           </div>
         </Card>
       </li>
