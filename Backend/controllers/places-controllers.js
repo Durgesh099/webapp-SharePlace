@@ -1,3 +1,4 @@
+const fs = require('fs')
 const {validationResult} = require('express-validator')
 const HttpError = require('../models/http-error')
 const Place = require('../models/place')
@@ -46,17 +47,17 @@ const createPlace = async (req,res,next)=>{
         return next(new HttpError('Invalid inputs passed,please check your data.',422))
     }
     
-    const {title,description,address,location,creator}=req.body
+    const {title,description,location,address,creator}=req.body
     
     const createdPlace = new Place({
         title,
         description,
         address,
         location,
-        image: 'https://www.holidify.com/images/cmsuploads/compressed/Pune_OSHO_Teerth_Park_Preeti-Parashar_11_20170918194524.JPG',
+        image: req.file.path,
         creator
     })
-
+    
     //check if the user is already signed up
     let user
     try{
@@ -67,8 +68,8 @@ const createPlace = async (req,res,next)=>{
     if(!user){
         return next(new HttpError('Could not find user with provided Id'),404)
     }
-
     //transactions and sessions
+    console.log(user,createdPlace)
     try{
         const sess = await mongoose.startSession()
         sess.startTransaction()
@@ -78,7 +79,7 @@ const createPlace = async (req,res,next)=>{
         await sess.commitTransaction()
 
     } catch(err){
-        const error = new HttpError('Creating place failed, please try again.',500)
+        const error = new HttpError('Creating place fail, please try again.',500)
         return next(error)
     }
 
@@ -138,6 +139,8 @@ const deletePlace = async (req,res,next)=>{
         return next(new HttpError('Could not find the place for this Id',404))
     }
 
+    const imagePath = place.image
+
     try{
         const sess = await mongoose.startSession()
         sess.startTransaction()
@@ -146,9 +149,12 @@ const deletePlace = async (req,res,next)=>{
         await place.creator.save({session: sess})
         await sess.commitTransaction()
     } catch(err){
-        const error = new HttpError('ssSomething went wrong, could not delete place.',500)
+        const error = new HttpError('Something went wrong, could not delete place.',500)
         return next(error)
     }
+    fs.unlink(imagePath, err=>{
+        console.log(err)
+    })
 
     res.status(200).json({message: 'Deleted Place'})
 }

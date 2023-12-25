@@ -36,7 +36,7 @@ const signup = async (req,res,next)=>{
     const createdUser = new User({
         name,
         email,
-        image: 'https://staticg.sportskeeda.com/editor/2023/04/8487c-16812291196707.png',
+        image: req.file.path,
         password,
         places: []
     })
@@ -66,7 +66,7 @@ const login = async (req,res,next)=>{
         return next(error)
     }
 
-    res.json({message: 'Logged In'})
+    res.json({message: 'Logged In', user: existingUser.toObject({getters:true})})
 }
 
 exports.getUsers = getUsers

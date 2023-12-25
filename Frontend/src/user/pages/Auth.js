@@ -7,13 +7,14 @@ import { AuthContext } from "../../shared/context/auth-context";
 import Button from "../../shared/components/Button";
 import ErrorModal from '../../shared/UIElements/ErrorModal'
 import LoadingSpinner from '../../shared/UIElements/LoadingSpinner'
+import ImageUpload from "../../shared/FormElements/ImageUpload";
+import { useHttpClient } from "../../shared/hooks/http-hook";
 import './Auth.css';
  
 const Auth = () => {
   const auth = useContext(AuthContext);
   const [isLoginMode, setIsLoginMode] = useState(true);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState();
+  const {Loading, error, sendRequest, clearError} = useHttpClient()
 
   const [formState, inputHandler, setFormData] = useForm(
     {
@@ -34,7 +35,8 @@ const Auth = () => {
       setFormData(
         {
           ...formState.inputs,
-          name: undefined
+          name: undefined,
+          image: undefined
         },
         formState.inputs.email.isValid && formState.inputs.password.isValid
       );
@@ -44,6 +46,10 @@ const Auth = () => {
           ...formState.inputs,
           name: {
             value: '',
+            isValid: false
+          },
+          image: {
+            value: null,
             isValid: false
           }
         },
@@ -55,68 +61,47 @@ const Auth = () => {
 
   const authSubmitHandler = async event => {
     event.preventDefault();
-    
-    setIsLoading(true);
 
     if (isLoginMode) {
-      try {
-        const response = await fetch('http://localhost:3000/api/users/login', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
+      try{
+        const responseData = await sendRequest(
+          'http://localhost:3000/api/users/login',
+          'POST',
+          JSON.stringify({
             email: formState.inputs.email.value,
             password: formState.inputs.password.value
-          })
-        });
+          }),
+          {
+          'Content-Type': 'application/json'
+          }
+        );
 
-        const responseData = await response.json();
-        if (!response.ok) {
-          throw new Error(responseData.message);
-        }
-        setIsLoading(false);
-        auth.login();
-      } catch (err) {
-        setIsLoading(false);
-        setError(err.message || 'Something went wrong, please try again.');
-      }
+        auth.login(responseData.user.id);
+      }catch(err){}
+
     } else {
       try {
-        const response = await fetch('http://localhost:3000/api/users/signup', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            name: formState.inputs.name.value,
-            email: formState.inputs.email.value,
-            password: formState.inputs.password.value
-          })
-        });
+        const formData = new FormData()
+        formData.append('email',formState.inputs.email.value)
+        formData.append('name',formState.inputs.name.value)
+        formData.append('password',formState.inputs.password.value)
+        formData.append('image',formState.inputs.image.value)
+        const responseData = await sendRequest(
+          'http://localhost:3000/api/users/signup',
+          'POST',
+          formData
+        )
 
-        const responseData = await response.json();
-        if (!response.ok) {
-          throw new Error(responseData.message);
-        }
-        setIsLoading(false);
-        auth.login();
-      } catch (err) {
-        setIsLoading(false);
-        setError(err.message || 'Something went wrong, please try again.');
-      }
+        auth.login(responseData.user.id);
+      } catch (err) {}
     }
-  };
-
-  const errorHandler = () => {
-    setError(null);
   };
 
   return (
     <React.Fragment>
-      <ErrorModal error={error} onClear={errorHandler} />
+      <ErrorModal error={error} onClear={clearError} />
       <Card className="authentication">
-        {isLoading && <LoadingSpinner asOverlay />}
+        {Loading && <LoadingSpinner asOverlay />}
         <h2>Login Required</h2>
         <hr />
         <form onSubmit={authSubmitHandler}>
@@ -131,6 +116,7 @@ const Auth = () => {
               onInput={inputHandler}
             />
           )}
+          {!isLoginMode && <ImageUpload center id='image' onInput={inputHandler} errorText="Please upload an image."/>}
           <Input
             element="input"
             id="email"
@@ -145,7 +131,7 @@ const Auth = () => {
             id="password"
             type="password"
             label="Password"
-            validators={[VALIDATOR_MINLENGTH(5)]}
+            validators={[VALIDATOR_MINLENGTH(6)]}
             errorText="Please enter a valid password, at least 5 characters."
             onInput={inputHandler}
           />

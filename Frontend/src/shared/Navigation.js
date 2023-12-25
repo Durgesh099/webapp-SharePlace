@@ -43,7 +43,7 @@ const Navigation = () => {
                 <li><NavLink to="/" exact onClick={closeDrawer}>All Users</NavLink></li>
             </h3>
             {auth.isLoggedIn && <h3>
-                <li><NavLink to="/u1/places" onClick={closeDrawer}>My Places</NavLink></li>
+                <li><NavLink to={`/${auth.userId}/places`} onClick={closeDrawer}>My Places</NavLink></li>
             </h3>}
             {auth.isLoggedIn && <h3>
                 <li><NavLink to="/places/new" onClick={closeDrawer}>Add a Place</NavLink></li>
@@ -52,7 +52,7 @@ const Navigation = () => {
                 <li><NavLink to="/auth" onClick={closeDrawer}>Authenticate</NavLink></li>
             </h3>}
             {auth.isLoggedIn && <h3>
-                <li><button className="b" onClick={auth.logout}>Logout</button></li>
+                <li><NavLink to="/auth" onClick={auth.logout}>Logout</NavLink></li>
             </h3>}
         </ul>
     </Sidedraw>}
