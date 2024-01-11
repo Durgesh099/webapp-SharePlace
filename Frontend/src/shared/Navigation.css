@@ -46,7 +46,7 @@
     height: 100%;
 }
 
-@media (min-width: 800px) {
+@media (min-width: 900px) {
     .nav_btn{
         display: none;
     }
@@ -61,7 +61,7 @@
     }
 }
 
-@media (max-width: 800px) {
+@media (max-width: 900px) {
     .nav_nav {
         display: none;
     }

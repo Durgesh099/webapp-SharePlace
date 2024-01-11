@@ -4,6 +4,45 @@ const HttpError = require('../models/http-error')
 const Place = require('../models/place')
 const User = require('../models/user')
 const { default: mongoose } = require('mongoose')
+const { ObjectId } = require('mongodb')
+
+const getPlaces = async (req,res,next)=>{
+    let places
+    try{
+        places = await Place.find()
+    } catch(err){
+        const error = new HttpError('Something went wrong',500)
+        return next(error)
+    }
+
+    if(!places){
+        const error = new HttpError('Could not find places',404)
+        return next(error)
+    }
+    res.json({places: places.map(place=>place.toObject({getters:true}))}) //{place}=>{place:place}
+}
+
+const getSearchedPlaces = async (req,res,next)=>{
+    const {search} = req.body;
+    let places;
+    try{
+        places = await Place.find({ $or: [
+            {title:{ $regex: new RegExp(search, 'i') }  },
+            {description:{ $regex: new RegExp(search, 'i') }  },
+            {address:{ $regex: new RegExp(search, 'i') }  }
+        ]
+        })
+    } catch(err){ 
+        const error = new HttpError('Something went wrong',500)
+        return next(error)
+    }
+
+    if(!places){
+        const error = new HttpError('Could not find places',404)
+        return next(error)
+    }
+    res.json({places: places.map(place=>place.toObject({getters:true}))}) //{place}=>{place:place}
+}
 
 const getPlaceById = async (req,res,next)=>{
     const placeId = req.params.pid
@@ -24,12 +63,13 @@ const getPlaceById = async (req,res,next)=>{
 }
 
 const getPlacesByUserId = async (req,res,next)=>{
-    const userId = req.params.uid
-    let places
+    const userId = req.params.uid;
+    let places;
     try{
         places = await Place.find({creator:userId})
     } catch(err){
         const error = new HttpError('Fetching places failed, please try again later',500)
+        console.log(err)
         return next(error)
     }
 
@@ -47,7 +87,7 @@ const createPlace = async (req,res,next)=>{
         return next(new HttpError('Invalid inputs passed,please check your data.',422))
     }
     
-    const {title,description,location,address,creator}=req.body
+    const {title,description,location,address}=req.body
     
     const createdPlace = new Place({
         title,
@@ -55,13 +95,13 @@ const createPlace = async (req,res,next)=>{
         address,
         location,
         image: req.file.path,
-        creator
+        creator: req.userData.userId
     })
     
     //check if the user is already signed up
     let user
     try{
-        user = await User.findById(creator)
+        user = await User.findById(req.userData.userId)
     }catch(err){
         return next(new HttpError('Creating Place failed, please try again.',500))
     }
@@ -69,7 +109,6 @@ const createPlace = async (req,res,next)=>{
         return next(new HttpError('Could not find user with provided Id'),404)
     }
     //transactions and sessions
-    console.log(user,createdPlace)
     try{
         const sess = await mongoose.startSession()
         sess.startTransaction()
@@ -107,6 +146,14 @@ const updatePlace = async (req, res, next) => {
       );
       return next(error);
     }
+
+    if(place.creator.toString()!==req.userData.userId){
+        const error = new HttpError(
+            `You cannot edit other user's uploaded place.`,
+            500
+          );
+          return next(error);
+    }
   
     place.title = title;
     place.description = description;
@@ -139,6 +186,14 @@ const deletePlace = async (req,res,next)=>{
         return next(new HttpError('Could not find the place for this Id',404))
     }
 
+    if(place.creator.id!==req.userData.userId){
+        const error = new HttpError(
+            `You cannot delete other user's uploaded place.`,
+            401
+          );
+          return next(error);
+    }
+
     const imagePath = place.image
 
     try{
@@ -159,8 +214,10 @@ const deletePlace = async (req,res,next)=>{
     res.status(200).json({message: 'Deleted Place'})
 }
 
+exports.getPlaces = getPlaces
 exports.getPlaceById = getPlaceById
 exports.getPlacesByUserId = getPlacesByUserId
 exports.createPlace = createPlace
 exports.updatePlace = updatePlace
 exports.deletePlace = deletePlace
+exports.getSearchedPlaces = getSearchedPlaces

@@ -24,7 +24,7 @@ const Navigation = () => {
     if(auth.isLoggedIn){
         yourPlace = (
         <h1 className="nav_h1">
-            <Link to="/u1/places">Your Places</Link>
+            <Link to={`/${auth.userId}/places`}>Your Places</Link>
         </h1>)
     } else {
         yourPlace = (
@@ -42,14 +42,17 @@ const Navigation = () => {
             <h3>
                 <li><NavLink to="/" exact onClick={closeDrawer}>All Users</NavLink></li>
             </h3>
+            <h3>
+                <li><NavLink to="/places" exact onClick={closeDrawer}>All Places</NavLink></li>
+            </h3>
             {auth.isLoggedIn && <h3>
                 <li><NavLink to={`/${auth.userId}/places`} onClick={closeDrawer}>My Places</NavLink></li>
             </h3>}
             {auth.isLoggedIn && <h3>
-                <li><NavLink to="/places/new" onClick={closeDrawer}>Add a Place</NavLink></li>
+                <li><NavLink to="/places/new" onClick={closeDrawer}>Add Place</NavLink></li>
             </h3>}
             {!auth.isLoggedIn && <h3>
-                <li><NavLink to="/auth" onClick={closeDrawer}>Authenticate</NavLink></li>
+                <li><NavLink to="/auth" onClick={closeDrawer}>Login</NavLink></li>
             </h3>}
             {auth.isLoggedIn && <h3>
                 <li><NavLink to="/auth" onClick={auth.logout}>Logout</NavLink></li>

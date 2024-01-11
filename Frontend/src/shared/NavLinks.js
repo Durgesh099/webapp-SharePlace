@@ -11,14 +11,17 @@ const NavLinks = () => {
             <h3>
                 <li><NavLink to="/" exact>All Users</NavLink></li>
             </h3>
+            <h3>
+                <li><NavLink to="/places" exact>All Places</NavLink></li>
+            </h3>
             {auth.isLoggedIn && <h3>
                 <li><NavLink to={`/${auth.userId}/places`}>My Places</NavLink></li>
             </h3>}
             {auth.isLoggedIn && <h3>
-                <li><NavLink to="/places/new">Add a Place</NavLink></li>
+                <li><NavLink to="/places/new">Add Place</NavLink></li>
             </h3>}
             {!auth.isLoggedIn && <h3>
-                <li><NavLink to="/auth">Authenticate</NavLink></li>
+                <li><NavLink to="/auth">Login</NavLink></li>
             </h3>}
             {auth.isLoggedIn && <h3>
                 <li><NavLink to="/auth" onClick={auth.logout}>Logout</NavLink></li>
