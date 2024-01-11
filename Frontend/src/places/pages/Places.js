@@ -16,7 +16,7 @@ const Places = () =>{
     useEffect(()=>{
         const fetchPlaces = async ()=>{
             try{
-                const responseData = await sendRequest(`http://localhost:3000/api/places`)
+                const responseData = await sendRequest(`https://webapp-share-place.vercel.app/api/places`)
                 setLoadedPlaces(responseData.places)
             }catch(err){
 
@@ -29,7 +29,7 @@ const Places = () =>{
         event.preventDefault();
         try{
             const responseData = await sendRequest(
-                `http://localhost:3000/api/places/search`,
+                `https://webapp-share-place.vercel.app/api/places/search`,
                 'POST',
                 JSON.stringify({
                     search: inputData

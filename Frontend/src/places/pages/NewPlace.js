@@ -53,7 +53,7 @@ const submitHandler = async event=>{
         formData.append('address',formState.inputs.address.value)
         formData.append('location',formState.inputs.location.value)
         formData.append('image',formState.inputs.image.value)
-        await sendRequest('http://localhost:3000/api/places/','POST',formData, {
+        await sendRequest('https://webapp-share-place.vercel.app/api/places/','POST',formData, {
           Authorization: 'Bearer '+auth.token
         })
 

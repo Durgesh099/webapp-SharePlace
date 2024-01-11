@@ -65,7 +65,7 @@ const Auth = () => {
     if (isLoginMode) {
       try{
         const responseData = await sendRequest(
-          'http://localhost:3000/api/users/login',
+          'https://webapp-share-place.vercel.app/api/users/login',
           'POST',
           JSON.stringify({
             email: formState.inputs.email.value,
@@ -87,7 +87,7 @@ const Auth = () => {
         formData.append('password',formState.inputs.password.value)
         formData.append('image',formState.inputs.image.value)
         const responseData = await sendRequest(
-          'http://localhost:3000/api/users/signup',
+          'https://webapp-share-place.vercel.app/api/users/signup',
           'POST',
           formData
         )

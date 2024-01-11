@@ -15,7 +15,7 @@ const UserPlaces = () =>{
     useEffect(()=>{
         const fetchPlaces = async ()=>{
             try{
-                const responseData = await sendRequest(`http://localhost:3000/api/places/user/${userId}`)
+                const responseData = await sendRequest(`https://webapp-share-place.vercel.app/api/places/user/${userId}`)
                 setLoadedPlaces(responseData.places)
                 
             }catch(err){
