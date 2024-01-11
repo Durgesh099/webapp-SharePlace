@@ -30,7 +30,7 @@ const PlaceItem = props => {
     setShowConfirmModal(false);
     try{
       await sendRequest(
-        `https://webapp-share-place.vercel.app/api/api/places/${props.id}`,
+        `${process.env.REACT_APP_API}/places/${props.id}`,
         'DELETE',
         null,
         {
@@ -82,7 +82,7 @@ const PlaceItem = props => {
         <Card className="place-item__content">
           {isLoading && <LoadingSpinner asOverlay/>}
           <div className="place-item__image">
-            <img src={`https://webapp-share-place.vercel.app/${props.image}`} alt={props.title} />
+            <img src={`${process.env.REACT_APP_IMG}/${props.image}`} alt={props.title} />
           </div>
           <div className="place-item__info">
             <h2>{props.title}</h2>
