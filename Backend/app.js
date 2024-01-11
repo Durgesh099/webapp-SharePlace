@@ -1,3 +1,5 @@
+require('dotenv').config()
+
 const fs = require('fs')
 const path = require('path')
 const express = require('express')
@@ -44,7 +46,7 @@ app.use((error, req, res, next)=>{
 })
 
 mongoose
-.connect('mongodb+srv://Durgesh:sonDURG@cluster0.elxa07e.mongodb.net/mern?retryWrites=true&w=majority')
+.connect(`mongodb+srv://${process.env.USER}:${process.env.PASSWORD}@cluster0.elxa07e.mongodb.net/${process.env.NAME}?retryWrites=true&w=majority`)
 .then(()=>{
     app.listen(3000, ()=>{
         console.log('Server is running...')
