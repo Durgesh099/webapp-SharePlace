@@ -1,23 +1,23 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {useParams} from "react-router-dom";
 import PlacesList from "../PlacesList";
 import ErrorModal from "../../shared/UIElements/ErrorModal";
 import LoadingSpinner from "../../shared/UIElements/LoadingSpinner";
 import { useHttpClient } from "../../shared/hooks/http-hook";
-import { AuthContext } from "../../shared/context/auth-context";
+import Seach from './z_search.png'
 
-const UserPlaces = () =>{
-    const auth = useContext(AuthContext)
+const Places = () =>{
     const [loadedPlaces, setLoadedPlaces]= useState()
+    const [inputData, setInputData]=useState("")
     const {isLoading,error,clearError,sendRequest}= useHttpClient()
 
     const userId = useParams().userId;
+
     useEffect(()=>{
         const fetchPlaces = async ()=>{
             try{
-                const responseData = await sendRequest(`${process.env.REACT_APP_API}/places/user/${userId}`)
+                const responseData = await sendRequest(`${window.location.origin}/places`)
                 setLoadedPlaces(responseData.places)
-                
             }catch(err){
 
             }
@@ -25,15 +25,40 @@ const UserPlaces = () =>{
         fetchPlaces()
     },[sendRequest,userId])
 
+    const searchPlacesHandler = async (event)=>{
+        event.preventDefault();
+        try{
+            const responseData = await sendRequest(
+                `${window.location.origin}/places/search`,
+                'POST',
+                JSON.stringify({
+                    search: inputData
+                }),
+                {
+                    'Content-Type': 'application/json'
+                }
+            )
+            setLoadedPlaces(responseData.places)
+        }catch(err){}
+    }
+
     const PlaceDeletedHandler = (deletedPlaceId)=>{
         setLoadedPlaces(prevPlaces=> prevPlaces.filter(
             place => place.id !== deletedPlaceId
         ))
     }
+
     return (
         <React.Fragment>
             <ErrorModal error={error} onClear={clearError}/>
-            {auth.userId !== userId && <h2 className="heading">Places Uploaded by the User</h2>}
+            <form onSubmit={searchPlacesHandler}>
+            <div className="search-bar-area">
+                <input type="text" className="searchbar" placeholder="Search for Places..." onChange={e=>setInputData(e.target.value)}/>
+                <button className="search" type="submit">
+                    <img className="searchBtn" src={Seach} alt="search"/>
+                </button>
+            </div>
+            </form>
             {isLoading && 
                 <div className="center">
                     <LoadingSpinner/>
@@ -43,4 +68,4 @@ const UserPlaces = () =>{
     )
 };
 
-export default UserPlaces;
+export default Places;

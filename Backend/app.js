@@ -14,7 +14,7 @@ const app = express()
 
 app.use(bodyParser.json())
 
-app.use('/uploads/images', express.static(path.join('uploads','images')))
+app.use('/api/uploads/images', express.static(path.join('uploads','images')))
 app.use(express.static(path.join('public')))
 
 app.use((req,res,next)=>{
@@ -30,6 +30,11 @@ app.use((req,res,next)=>{
 
 app.use('/api/places',placesRoutes)
 app.use('/api/users', usersRoutes)
+
+app.get("/",(req,res)=>{
+    app.use(express.static(path.resolve(__dirname,"Frontend","build")));
+    res.sendFile(path.resolve(__dirname,"Frontend","build","index.html"));
+})
 
 app.use((req,res,next)=>{
     throw new HttpError('Could not find this route.',404)
