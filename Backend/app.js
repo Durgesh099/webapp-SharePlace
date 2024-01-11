@@ -44,7 +44,7 @@ app.use((error, req, res, next)=>{
         return next(error)
     res.status(error.code || 500).json({message: error.message || 'An unknwon error occured!'})
 })
-
+console.log(process.env)
 mongoose
 .connect(`mongodb+srv://${process.env.USER}:${process.env.PASSWORD}@cluster0.elxa07e.mongodb.net/${process.env.NAME}?retryWrites=true&w=majority`)
 .then(()=>{
