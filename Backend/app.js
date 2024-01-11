@@ -15,6 +15,7 @@ const app = express()
 app.use(bodyParser.json())
 
 app.use('/uploads/images', express.static(path.join('uploads','images')))
+app.use(express.static(path.join('public')))
 
 app.use((req,res,next)=>{
     res.setHeader('Access-Control-Allow-Origin','*')
@@ -44,7 +45,7 @@ app.use((error, req, res, next)=>{
         return next(error)
     res.status(error.code || 500).json({message: error.message || 'An unknwon error occured!'})
 })
-console.log(process.env)
+
 mongoose
 .connect(`mongodb+srv://${process.env.USER}:${process.env.PASSWORD}@cluster0.elxa07e.mongodb.net/${process.env.NAME}?retryWrites=true&w=majority`)
 .then(()=>{

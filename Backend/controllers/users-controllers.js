@@ -52,7 +52,6 @@ const signup = async (req,res,next)=>{
     try{
         await createdUser.save()
     } catch(err){
-        console.log(err)
         const error = new HttpError('Signing Up failed, please try again.',500)
         return next(error)
     }
@@ -61,10 +60,11 @@ const signup = async (req,res,next)=>{
     try{
         token = jwt.sign(
             {userId:createdUser.id, email:createdUser.email},
-            process.env.JWT_KEY,
+            `${process.env.JWT_KEY}`,
             {expiresIn:'1h'}
         );
     }catch(err){
+        console.log(err)
         const error = new HttpError('Signing Up failed, please try again.',500)
         return next(error)
     }
@@ -74,7 +74,7 @@ const signup = async (req,res,next)=>{
 
 const login = async (req,res,next)=>{
     const {email, password} = req.body;
-    
+    console.log('Users got')
     let existingUser
     try{
         existingUser = await User.findOne({email:email})
@@ -102,7 +102,7 @@ const login = async (req,res,next)=>{
     try{
         token = jwt.sign(
             {userId:existingUser.id, email:existingUser.email},
-            process.env.JWT_KEY,
+            `${process.env.JWT_KEY}`,
             {expiresIn:'1h'}
         );
     }catch(err){
