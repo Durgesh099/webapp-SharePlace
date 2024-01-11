@@ -12,7 +12,7 @@ const Users = () => {
   useEffect(()=>{
     const fetchUsers = async () =>{
       try{
-        const responseData = await sendRequest('https://webapp-share-place.vercel.app/api/users')
+        const responseData = await sendRequest('https://webapp-share-place.vercel.app/api/api/users')
 
 
         setLoadedUsers(responseData.users)

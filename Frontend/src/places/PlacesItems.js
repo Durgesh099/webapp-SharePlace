@@ -30,7 +30,7 @@ const PlaceItem = props => {
     setShowConfirmModal(false);
     try{
       await sendRequest(
-        `https://webapp-share-place.vercel.app/api/places/${props.id}`,
+        `https://webapp-share-place.vercel.app/api/api/places/${props.id}`,
         'DELETE',
         null,
         {
