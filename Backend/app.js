@@ -48,7 +48,7 @@ app.use((error, req, res, next)=>{
 mongoose
 .connect(`mongodb+srv://${process.env.USER}:${process.env.PASSWORD}@cluster0.elxa07e.mongodb.net/${process.env.NAME}?retryWrites=true&w=majority`)
 .then(()=>{
-    app.listen(process.env.PORT, ()=>{
+    app.listen(5000, ()=>{
         console.log('Server is running...')
     })
 })
