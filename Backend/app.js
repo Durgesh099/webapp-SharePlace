@@ -49,7 +49,7 @@ mongoose
 .connect(`mongodb+srv://${process.env.USER}:${process.env.PASSWORD}@cluster0.elxa07e.mongodb.net/${process.env.NAME}?retryWrites=true&w=majority`)
 .then(()=>{
     app.listen(5000, ()=>{
-        console.log('Server is running...')
+        console.log(`Server is running on PORT=${process.env.PORT}`)
     })
 })
 .catch(err=>{
